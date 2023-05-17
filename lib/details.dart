@@ -1,9 +1,8 @@
 import 'dart:convert';
-
+import 'trackOrder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart%20';
 
 class Patient {
   final String yourName;
@@ -96,6 +95,93 @@ class Questions extends StatelessWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
+            Container(
+              margin:
+                  const EdgeInsets.only(top: 5, left: 20, right: 30, bottom: 5),
+              color: const Color.fromARGB(255, 250, 250, 250),
+              child: TextFormField(
+                controller: patientForm.userNameController,
+                decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: 'Enter Your Name',
+                    hintStyle: TextStyle(fontSize: 14.0)),
+              ),
+            ),
+            Container(
+              margin:
+                  const EdgeInsets.only(top: 1, left: 20, right: 30, bottom: 5),
+              color: const Color.fromARGB(255, 250, 250, 250),
+              child: TextFormField(
+                controller: patientForm.userPhoneController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  hintText: "Enter your mobile number",
+                  hintStyle: TextStyle(fontSize: 14.0),
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(
+                  top: 10, left: 20, right: 30, bottom: 5),
+              color: const Color.fromARGB(255, 250, 250, 250),
+              child: TextFormField(
+                autovalidateMode: AutovalidateMode.always,
+                controller: patientForm.userEmailController,
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  hintText: "Enter your email",
+                  hintStyle: TextStyle(fontSize: 14.0),
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(
+                  top: 10, left: 20, right: 30, bottom: 5),
+              color: const Color.fromARGB(255, 250, 250, 250),
+              child: TextFormField(
+                controller: patientForm.userAddressController,
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  hintText: "Enter your address",
+                  hintStyle: TextStyle(fontSize: 14.0),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 200.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.only(
+                      top: 1, bottom: 5, right: 30, left: 30),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: const Color.fromARGB(255, 29, 121, 242),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      patientForm.savePatient().then((_) {
+                        Navigator.pushNamed(context, '/trakOrder');
+                      }).catchError((error) {
+                        print('error');
+                      });
+                    },
+                    child: const Text(
+                      'Submit',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            )
           ],
         );
       }),
