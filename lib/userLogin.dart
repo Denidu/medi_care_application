@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'dashBoard.dart';
-
 void main() {
   runApp(
     ProviderScope(
@@ -55,14 +53,14 @@ class LoginState {
 }
 
 class LoginBloc {
-  final Reader _read;
+  final Reader read;
   final TextEditingController _userIdController = TextEditingController();
   final TextEditingController _userPassController = TextEditingController();
   late final StreamController<bool> _isLoadingController;
   Stream<bool> get isLoadingStream => _isLoadingController.stream;
   final _loginStateController = StateController<LoginState>(LoginState());
 
-  LoginBloc(this._read) {
+  LoginBloc(this.read) {
     _isLoadingController = StreamController<bool>.broadcast();
   }
 

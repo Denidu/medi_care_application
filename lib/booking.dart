@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:table_calender/table_calender.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:riverpod/riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TimeSlot {
   final String title;
@@ -59,7 +59,7 @@ class BookingProvider extends StateNotifier<AsyncValue<TimeSlot>> {
 
 final bookingProvider =
     StateNotifierProvider<BookingProvider, AsyncValue<TimeSlot>>(
-  (ref) => BookingProvider(ref.watch(locationProvider).state),
+  (ref) => BookingProvider(ref.watch(locationProvider)),
 );
 
 final locationProvider = Provider<String>((ref) => 'Your Location');
