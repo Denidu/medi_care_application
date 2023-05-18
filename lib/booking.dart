@@ -32,27 +32,23 @@ class BookingProvider extends StateNotifier<AsyncValue<TimeSlot>> {
   final String location;
 
   Future<void> fetchTimeSlot() async {
-    try {
-      final response = await http.post(
-        Uri.parse('https://medi.bto.bistecglbal.com/api/SaveTimeSLot'),
-        headers: <String, String>{
-          'Content-Type': 'applicatio/json; cahrset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'Title': '',
-          'Selection': '',
-          'Time': DateTime.now().toIso8601String(),
-        }),
-      );
+    final response = await http.post(
+      Uri.parse('https://medi.bto.bistecglbal.com/api/SaveTimeSLot'),
+      headers: <String, String>{
+        'Content-Type': 'applicatio/json; cahrset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'Title': '',
+        'Selection': '',
+        'Time': DateTime.now().toIso8601String(),
+      }),
+    );
 
-      if (response.statusCode == 200) {
-        final timeSlot = TimeSlot.fromJson(jsonDecode(response.body));
-        state = AsyncValue.data(timeSlot);
-      } else {
-        state = AsyncValue.error('FAild to create time Slot');
-      }
-    } catch (e) {
-      state = AsyncValue.error('Faild to create time Slot');
+    if (response.statusCode == 200) {
+      final timeSlot = TimeSlot.fromJson(jsonDecode(response.body));
+      state = AsyncValue.data(timeSlot);
+    } else {
+      throw Exception('Faild to create a file.');
     }
   }
 }
@@ -65,7 +61,7 @@ final bookingProvider =
 final locationProvider = Provider<String>((ref) => 'Your Location');
 
 class Booking extends StatelessWidget {
-  const Booking({Key? key}) : super(key: key);
+  const Booking({Key? key, required String location}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

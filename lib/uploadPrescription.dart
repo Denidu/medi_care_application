@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'booking.dart';
 
 class uploadPrescription extends StatefulWidget {
@@ -31,6 +30,26 @@ class _uploadPrescriptionState extends State<uploadPrescription> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              'Upload Your Prescription',
+              style: TextStyle(
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 20, 136, 231),
+              ),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

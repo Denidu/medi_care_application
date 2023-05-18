@@ -4,24 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  runApp(
-    ProviderScope(
-      child: MyApp(),
-    ),
-  );
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-    );
-  }
-}
-
 class UserCredentials {
   final String username;
   final String password;
@@ -54,6 +36,7 @@ class LoginState {
 
 class LoginBloc {
   final Reader read;
+
   final TextEditingController _userIdController = TextEditingController();
   final TextEditingController _userPassController = TextEditingController();
   late final StreamController<bool> _isLoadingController;
@@ -104,7 +87,7 @@ class LoginBloc {
 }
 
 class LoginPage extends ConsumerWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key, required String title}) : super(key: key);
 
   @override
   Widget build(BuildContext context, Widget ref) {

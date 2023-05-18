@@ -1,15 +1,18 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '';
-import 'camera_toggles_row.dart';
-
+import 'package:medi_care_appliaction/widgets/camera_control_row.dart';
+import 'package:medi_care_appliaction/widgets/camera_preview_widget.dart';
+import 'package:medi_care_appliaction/widgets/camera_toggles_row_widget.dart';
+import 'package:medi_care_appliaction/widgets/thambnail_widget.dart';
 
 class CameraProvider extends StateNotifier<List<CameraDescription>> {
   CameraProvider() : super([]);
 
   Future<void> initializeCamera() async {
-    final cameras = await availableCamera();
+    final cameras = await availableCameras();
     state = cameras;
   }
 }
@@ -73,22 +76,22 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
               child: Padding(
                 padding: const EdgeInsets.all(1.0),
                 child: Center(
-                  child: CameraPreviewWidget(controller),
+                  child: cameraPreviewWidget(controller),
                 ),
               ),
             ),
           ),
-          CaptureControlRowWidget(controller, onTakePictureButtonPressed),
+          captureControlRowWidget(controller, onTakePictureButtonPressed),
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: Row(
               children: [
-                CameraTogglesRowWidget(
+                cameraTogglesRowWidget(
                   controller,
                   widget.cameras,
                   onNewCameraSelected,
                 ),
-                ThumbnailWidget(imagefile),
+                thumbnailWidget(imagefile),
               ],
             ),
           ),
@@ -103,75 +106,71 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
       controller = null;
       await oldController.dispose();
     }
-  }
+    final cameraController = CameraController(
+      cameraDescription,
+      ResolutionPreset.high,
+      imageFormatGroup: ImageFormatGroup.jpeg,
+    );
 
-  final cameraController = CameraController(
-    cameraDescription,
-    ResolutionPreset.high,
-    imageFormatGroup: ImageFormatGroup.jpeg,
-  );
+    controller = cameraController;
 
-  controller = cameraController;
-  
- 
-  
-  cameraController.addListener((){
-    if (mounted){
-      setState((){});
-    }
-    if(cameraController.value.hasError){
-      print('Camera Error ${cameraController.value.errorDescription}');
-    }
-  });
+    CameraController.addListener(() {
+      if (mounted) {
+        setState(() {});
+      }
+      if (cameraController.value.hasError) {
+        print('Camera Error ${cameraController.value.errorDescription}');
+      }
+    });
 
-  try{
-    await cameraController.initialize();
-  } catch (e){
-    switch(e.code){
-      case 'CameraAccessDenied':
-      print('You have denied camera access');
-      break;
-      case 'CamaraAcessDeniedWithoutPrompt':
-      print('Enable camera');
-      break;
-      case 'CameraAccessRestricted':
-      print('Camera access restricted');
-      break;
-      default:
-      break;
-
+    try {
+      await cameraController.initialize();
+    } on CameraException catch (e) {
+      switch (e.code) {
+        case 'CameraAccessDenied':
+          print('You have denied camera access');
+          break;
+        case 'CamaraAcessDeniedWithoutPrompt':
+          print('Enable camera');
+          break;
+        case 'CameraAccessRestricted':
+          print('Camera access restricted');
+          break;
+        default:
+          break;
+      }
     }
   }
 }
 
-Future<void>onTakePictureButtonPressed() async{
+Future<void> onTakePictureButtonPressed() async {
   final picture = await takePicture();
-  if(picture != null){
+  if (picture != null) {
     print('Picture saved to ${picture.path}');
   }
 }
 
-Future<XFile?> takePicture() async{
+Future<XFile?> takePicture() async {
   final cameraController = controller;
-  if (cameraController== null || !cameraController.value.isInitialized){
+  if (cameraController == null || !cameraController.value.isInitialized) {
     print('Error: Select the Camera first');
     return null;
   }
 
-  if(cameraController.value.isTakingPicture){
+  if (cameraController.value.isTakingPicture) {
     return null;
   }
-  try{
+  try {
     final XFile file = await cameraController.takingPicture();
     return file;
-  }on CameraException catch (e){
+  } on CameraException catch (e) {
     print('Camera Error : ${e.toString()}');
     return null;
   }
 }
 
 class CameraApp extends StatelessWidget {
-  const CameraApp({Key? key, required this.cameras}):super(key: key);
+  const CameraApp({Key? key, required this.cameras}) : super(key: key);
 
   final List<CameraDescription> cameras;
 
@@ -182,6 +181,3 @@ class CameraApp extends StatelessWidget {
     );
   }
 }
-
-
-
