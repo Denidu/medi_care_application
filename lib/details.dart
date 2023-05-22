@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:js';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:medi_care_appliaction/trackOrder.dart';
@@ -25,9 +25,17 @@ class Patient {
         email: json['Email'],
         address: json['Address']);
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'YourName': yourName,
+      'Phone': phone,
+      'Email': email,
+      'Address': address,
+    };
+  }
 }
 
-class PatientForNotifier extends ChangeNotifier {
+class PatientFormNotifier extends ChangeNotifier {
   final TextEditingController userNameController =
       TextEditingController(text: '');
   final TextEditingController userPhoneController =
@@ -70,20 +78,19 @@ class PatientForNotifier extends ChangeNotifier {
   }
 }
 
-final patientFormProvider =
-    ChangeNotifierProvider((ref) => patientFormProvider());
+final patientProvider = Provider((ref) => PatientFormNotifier());
 
-class Questions extends StatelessWidget {
+class Questions extends ConsumerWidget {
   const Questions({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final patientForm = ref.watch(patientProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bistec Care'),
       ),
       body: Consumer(builder: (context, watch, _) {
-        final patientForm = watch(patientFormProvider);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

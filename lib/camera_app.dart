@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -114,7 +112,7 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
 
     controller = cameraController;
 
-    CameraController.addListener(() {
+    cameraController.addListener(() {
       if (mounted) {
         setState(() {});
       }
@@ -125,6 +123,9 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
 
     try {
       await cameraController.initialize();
+      setState(() {
+        controller = cameraController;
+      });
     } on CameraException catch (e) {
       switch (e.code) {
         case 'CameraAccessDenied':
@@ -141,31 +142,30 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
       }
     }
   }
-}
 
-Future<void> onTakePictureButtonPressed() async {
-  final picture = await takePicture();
-  if (picture != null) {
-    print('Picture saved to ${picture.path}');
-  }
-}
-
-Future<XFile?> takePicture() async {
-  final cameraController = controller;
-  if (cameraController == null || !cameraController.value.isInitialized) {
-    print('Error: Select the Camera first');
-    return null;
+  Future<void> onTakePictureButtonPressed() async {
+    final picture = await takePicture(controller);
+    if (picture != null) {
+      print('Picture saved to ${picture.path}');
+    }
   }
 
-  if (cameraController.value.isTakingPicture) {
-    return null;
-  }
-  try {
-    final XFile file = await cameraController.takingPicture();
-    return file;
-  } on CameraException catch (e) {
-    print('Camera Error : ${e.toString()}');
-    return null;
+  Future<XFile?> takePicture(CameraController? cameraController) async {
+    if (cameraController == null || !cameraController.value.isInitialized) {
+      print('Error: Select the Camera first');
+      return null;
+    }
+
+    if (cameraController.value.isTakingPicture) {
+      return null;
+    }
+    try {
+      final XFile file = await cameraController.takePicture();
+      return file;
+    } on CameraException catch (e) {
+      print('Camera Error : ${e.toString()}');
+      return null;
+    }
   }
 }
 
