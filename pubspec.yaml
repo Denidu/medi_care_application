@@ -42,7 +42,8 @@ dependencies:
   camera: ^0.10.5
   riverpod: ^2.3.6
   flutter_hooks: ^0.18.0
-  camera_camera: ^1.0.0
+  
+
 
 
 

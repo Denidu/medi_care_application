@@ -103,8 +103,8 @@ class _DashBoardState extends State<DashBoard> {
                           margin: const EdgeInsets.all(10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              const Text(
+                            children: const [
+                              Text(
                                 'Select Your Phamacy :',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
