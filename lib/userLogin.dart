@@ -124,6 +124,20 @@ class LoginPage extends ConsumerWidget {
                     fontSize: 15.0,
                   ),
                 ),
+                const SizedBox(height: 10.0),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, top: 20, bottom: 20),
+                  child: TextField(
+                    controller: bloc._userIdController,
+                    style: const TextStyle(fontSize: 20.0),
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "username",
+                    ),
+                  ),
+                ),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -131,7 +145,7 @@ class LoginPage extends ConsumerWidget {
                   padding: const EdgeInsets.only(
                       left: 20, right: 20, top: 20, bottom: 20),
                   child: TextField(
-                    controller: bloc._userIdController,
+                    controller: bloc._userPassController,
                     style: const TextStyle(fontSize: 20.0),
                     autofocus: true,
                     decoration: const InputDecoration(
